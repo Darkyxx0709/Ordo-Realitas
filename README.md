@@ -1,2 +1,229 @@
-# Ordo-Realitas
-???
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACCESS //</title>
+
+<style>
+:root{
+  --green:#00ff9c;
+  --green-dim:rgba(0,255,156,.35);
+  --glow:0 0 14px rgba(0,255,156,.75);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+html,body{
+  width:100%;
+  height:100%;
+  background:radial-gradient(circle at center,#07100c 0%,#010302 70%);
+  color:var(--green);
+  font-family:"Courier New",monospace;
+  overflow:hidden;
+}
+
+/* GRID CRT */
+.matrix{
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(rgba(0,255,156,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,255,156,.05) 1px,transparent 1px);
+  background-size:24px 24px;
+  animation:drift 18s linear infinite;
+  opacity:.35;
+  pointer-events:none;
+}
+@keyframes drift{to{background-position:300px 300px}}
+
+/* NOISE */
+.noise::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity="0.08"/></svg>');
+  animation:noise .2s infinite;
+  pointer-events:none;
+}
+@keyframes noise{50%{transform:translate(1%,-1%)}}
+
+/* CENTER */
+.center{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:2;
+}
+
+/* TERMINAL */
+.terminal{
+  padding:30px 36px 34px;
+  border:1px solid var(--green-dim);
+  background:linear-gradient(180deg,rgba(0,255,156,.06),rgba(0,0,0,.45));
+  box-shadow:inset 0 0 30px rgba(0,255,156,.25),0 0 30px rgba(0,255,156,.25);
+}
+
+.prompt{
+  font-size:12px;
+  letter-spacing:3px;
+  opacity:.75;
+  margin-bottom:12px;
+}
+
+/* GLITCH */
+.glitch{position:relative}
+.glitch::before,
+.glitch::after{
+  content:attr(data-text);
+  position:absolute;
+  left:0;top:0;
+}
+.glitch::before{color:#00ffd5;transform:translate(1px,0)}
+.glitch::after{color:#39ff14;transform:translate(-1px,0)}
+
+/* INPUT */
+.access{
+  width:260px;
+  background:transparent;
+  border:none;
+  border-bottom:2px solid var(--green);
+  padding:10px;
+  font-size:22px;
+  letter-spacing:14px;
+  color:var(--green);
+  outline:none;
+  box-shadow:var(--glow);
+  caret-color:transparent;
+}
+
+/* CARET */
+.caret{
+  width:10px;
+  height:22px;
+  background:var(--green);
+  margin-top:-22px;
+  animation:blink 1s steps(1) infinite;
+}
+@keyframes blink{50%{opacity:0}}
+
+/* HACK TRANSITION */
+.hack{
+  position:absolute;
+  inset:0;
+  background:black;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:13px;
+  letter-spacing:2px;
+  opacity:0;
+  z-index:5;
+}
+.hack.active{
+  opacity:1;
+  animation:flicker .8s infinite;
+}
+@keyframes flicker{50%{opacity:.4}}
+
+/* REPORT */
+.report{
+  position:absolute;
+  inset:0;
+  padding:40px;
+  line-height:1.7;
+  opacity:0;
+  transform:scale(1.04);
+  transition:1.2s;
+}
+.report.visible{
+  opacity:1;
+  transform:scale(1);
+}
+.title{
+  font-weight:bold;
+  margin-bottom:24px;
+  text-shadow:var(--glow);
+}
+
+/* ERROR */
+.shake{animation:shake .35s}
+@keyframes shake{
+  25%{transform:translateX(-3px)}
+  50%{transform:translateX(3px)}
+}
+</style>
+</head>
+
+<body class="noise">
+
+<div class="matrix"></div>
+
+<div class="center" id="login">
+  <div class="terminal">
+    <div class="prompt glitch" data-text="ENTER ACCESS CODE">ENTER ACCESS CODE</div>
+    <input class="access" id="code" maxlength="4" autofocus inputmode="numeric">
+    <div class="caret"></div>
+  </div>
+</div>
+
+<div class="hack" id="hack">
+  INTRUSÃO DETECTADA // DECODIFICANDO // BYPASS DE SEGURANÇA
+</div>
+
+<div class="report" id="report">
+  <div class="title">ORDEM REALITAS — RELATÓRIO INTERNO</div>
+
+  <p><strong>Assunto:</strong> Paradeiro de Celso Portiolli</p>
+  <p><strong>Status:</strong> Contido</p>
+  <p><strong>Localização:</strong> Cela de contenção padrão, setor restrito</p>
+  <br>
+  <p>Celso Portiolli encontra-se sob custódia da Ordo Realitas, mantido em cela isolada e sem a Relíquia de Energia. O indivíduo apresenta instabilidade psicológica severa, com discurso fragmentado e comportamento errático.</p>
+  <br>
+  <p>Durante a observação, repete frases de cunho profético e ameaçador, como “Vocês estão ferrados” e “Eu vim para salvar vocês”, alternando entre delírios messiânicos e postura de alerta constante.</p>
+  <br>
+  <p>Até o momento, não foram registradas tentativas de fuga. Recomenda-se monitoramento contínuo, avaliação psíquica recorrente e restrição total de acesso a artefatos paranormais.</p>
+</div>
+
+<script>
+const input=document.getElementById("code");
+const hack=document.getElementById("hack");
+const report=document.getElementById("report");
+const login=document.getElementById("login");
+let tries=0;
+
+function attemptAccess(){
+  if(input.value==="1109"){
+    login.style.display="none";
+    hack.classList.add("active");
+    setTimeout(()=>{
+      hack.classList.remove("active");
+      report.classList.add("visible");
+    },1600);
+  }else{
+    tries++;
+    input.classList.add("shake");
+    setTimeout(()=>input.classList.remove("shake"),350);
+    input.value="";
+    if(tries>=3){
+      hack.textContent="LOCKDOWN // TOO MANY ATTEMPTS";
+      hack.classList.add("active");
+    }
+  }
+}
+
+input.addEventListener("keydown",(e)=>{
+  if(e.key==="Enter"){
+    attemptAccess();
+  }
+});
+
+input.addEventListener("input",()=>{
+  input.value=input.value.replace(/\D/g,"");
+});
+</script>
+
+</body>
+</html>
